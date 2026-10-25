@@ -105,6 +105,7 @@ html:not(.js) .mq-track,html.rm .mq-track{animation:mq 30s linear infinite}
 .tick:before{content:"";position:absolute;left:50%;top:-6px;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;background:var(--bg);border:1px solid var(--muted);transition:all .3s}
 .tick:first-child:before{left:5.5px}.tick:last-child:before{left:auto;right:-5.5px}
 .tick:hover,.tick.on{color:var(--fg)}
+.tick:focus,.arw:focus{outline:none}.tick:focus-visible,.arw:focus-visible{outline:1px solid var(--spice);outline-offset:4px}
 .tick.on:before,.tick.done:before{background:var(--spice);border-color:var(--spice)}
 .tick.on:before{box-shadow:0 0 0 6px rgba(224,97,43,.2)}
 .tl-hint{display:none}
@@ -155,7 +156,9 @@ html:not(.js) .mq-track,html.rm .mq-track{animation:mq 30s linear infinite}
  .slide{grid-template-columns:1fr;gap:22px}
  .era{margin-bottom:18px}
  .tl.car .bgyear{top:22%}
- .tl.car .ruler{overflow-x:auto;justify-content:flex-start;gap:30px;padding:0 6px 10px;margin-top:6svh;scrollbar-width:none}
+ /* the ruler scrolls sideways here, which clips anything above its box: keep dots and line inside the padding */
+ .tl.car .ruler{overflow-x:auto;justify-content:flex-start;gap:30px;padding:14px 6px 10px;margin-top:6svh;scrollbar-width:none;border-top:0;background:linear-gradient(var(--line),var(--line)) 0 13px/100% 1px no-repeat}
+ .ruler .fill{top:13px}
  .tl.car .ruler::-webkit-scrollbar{display:none}
  .tick:first-child:before,.tick:last-child:before{left:50%;right:auto}
  .shelf{grid-template-columns:1fr;gap:40px}
