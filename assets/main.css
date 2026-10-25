@@ -86,7 +86,7 @@ html:not(.js) .mq-track,html.rm .mq-track{animation:mq 30s linear infinite}
 .yr{font:700 clamp(40px,4.6vw,78px)/1 Oswald;color:var(--spice);font-variant-numeric:tabular-nums}
 .era{font:500 13px Oswald;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin:10px 0 28px}
 .tag{font:500 12px Oswald;letter-spacing:.25em;text-transform:uppercase;color:var(--sand)}
-.slide h3{font:500 clamp(24px,2.3vw,38px)/1.08 Oswald;text-transform:uppercase;margin:10px 0 12px}
+.slide h3{font:500 clamp(24px,2.3vw,38px)/1.2 Oswald;text-transform:uppercase;margin:10px 0 12px}
 .slide p{color:var(--muted);margin:0;max-width:40ch}
 .watch{display:inline-flex;align-items:center;gap:14px;margin-top:28px;font:500 13px Oswald;letter-spacing:.2em;text-transform:uppercase}
 .watch:before{content:"";width:52px;height:52px;border-radius:50%;border:1px solid var(--sand);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7l9 5-9 5z' fill='%23d9a066'/%3E%3C/svg%3E") center/24px no-repeat;transition:background-color .3s}
