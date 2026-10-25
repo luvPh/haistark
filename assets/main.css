@@ -135,11 +135,16 @@ html:not(.js) .mq-track,html.rm .mq-track{animation:mq 30s linear infinite}
 .contact .fd{height:45%;z-index:1}
 .ct-in{position:relative;z-index:2;width:100%;padding:0 var(--pad) 40px}
 .quote{font:400 clamp(18px,1.8vw,24px)/1.5 Fraunces,serif;font-style:italic;max-width:30ch;margin:18px 0 0}
-.mail{display:inline-block;font:500 clamp(26px,3.8vw,60px)/1.15 Oswald;margin:4svh 0 8svh;word-break:break-word;border-bottom:1px solid rgba(217,160,102,.35);padding-bottom:.1em;transition:border-color .3s}
+.mail-wrap{position:relative;display:inline-block;margin:4svh 0 8svh}
+.mail{display:inline-block;font:500 clamp(26px,3.8vw,60px)/1.15 Oswald;margin:0;word-break:break-word;border-bottom:1px solid rgba(217,160,102,.35);padding-bottom:.1em;transition:border-color .3s}
 .mail:hover{border-color:var(--spice)}
+.mail:hover .m1{color:var(--spice)}
 .mail .m2{color:var(--sand)}
-.mail .c{display:inline-block;transition:transform .35s cubic-bezier(.2,.8,.2,1),color .3s}
-.mail .c:hover{transform:translateY(-.12em);color:var(--spice)}
+.copy-hint{position:absolute;left:calc(100% + 18px);top:50%;transform:translateY(-70%);display:flex;align-items:flex-end;gap:10px;color:var(--sand);font:400 clamp(18px,1.7vw,26px) Fraunces,serif;font-style:italic;white-space:nowrap;pointer-events:none}
+.copy-hint svg{width:96px;height:48px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(-8px)}}
+.mail-wrap.copied .copy-hint{color:var(--spice)}
+.mail-wrap.copied .copy-hint svg{animation:none}
 .row{border-top:1px solid rgba(239,227,207,.12);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;color:var(--muted);font:500 13px Oswald;letter-spacing:.25em;text-transform:uppercase}
 .row a:hover{color:var(--sand)}
 
@@ -167,4 +172,6 @@ html:not(.js) .mq-track,html.rm .mq-track{animation:mq 30s linear infinite}
  .bk h3{grid-row:2;margin:0 0 4px;font-size:22px}.bk p{grid-row:3}.bk .badge{grid-row:4;align-self:start;justify-self:start;margin-top:12px}
  .pods{grid-template-columns:1fr}
  .sun{left:50%;top:10%}
+ .copy-hint{position:static;transform:none;margin-top:14px;align-items:center}
+ .copy-hint svg{width:44px;height:22px;transform:rotate(55deg);animation:none}
 }

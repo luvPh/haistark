@@ -264,11 +264,7 @@
 
   // ---------- contact: the sun sets as you arrive ----------
   gsap.fromTo('.sun', { yPercent: -40, scale: 0.7 }, { yPercent: 55, scale: 1.1, ease: 'none', scrollTrigger: { trigger: '.contact', start: 'top bottom', end: 'bottom bottom', scrub: true } });
-  // splitChars tags with .ch; mail letters get .c so they don't pick up the hero gradient
-  document.querySelectorAll('.mail .m1, .mail .m2').forEach(function (m) {
-    splitChars(m).forEach(function (s) { s.className = 'c'; });
-  });
-  gsap.from('.mail .c', { yPercent: 100, opacity: 0, duration: 1.2, stagger: 0.025, ease: 'expo.out', scrollTrigger: { trigger: '.mail', start: 'top 92%' } });
+  gsap.from('.mail-wrap', { y: 50, opacity: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.mail-wrap', start: 'top 95%' } });
 
   // language switch: relabel the ruler and re-measure
   function relang() { labelTicks(); renderYear(); var t = ticks[at]; gsap.set(fill, { width: t.offsetLeft + t.offsetWidth / 2 }); ScrollTrigger.refresh(); }

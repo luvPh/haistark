@@ -37,7 +37,34 @@
     '.yt-close{position:absolute;top:-44px;right:0;background:none;border:0;color:#fff;font-size:36px;cursor:pointer;line-height:1}';
   document.head.appendChild(css);
 
+  function copyText(t) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+    var ta = document.createElement('textarea');
+    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = document.execCommand('copy');
+    ta.remove();
+    return ok ? Promise.resolve() : Promise.reject();
+  }
+
   document.addEventListener('click', function (e) {
+    // clicking the email copies it; if copying fails, the mailto link still opens
+    var m = e.target.closest('[data-copy]');
+    if (m) {
+      e.preventDefault();
+      var wrap = m.parentNode, txt = wrap.querySelector('.ch-txt');
+      copyText(m.dataset.copy).then(function () {
+        var en = document.documentElement.lang === 'en';
+        txt.textContent = en ? txt.dataset.doneEn : txt.dataset.done;
+        wrap.classList.add('copied');
+        clearTimeout(wrap._t);
+        wrap._t = setTimeout(function () {
+          txt.innerHTML = document.documentElement.lang === 'en' ? txt.dataset.en : txt.dataset.vi;
+          wrap.classList.remove('copied');
+        }, 2000);
+      }, function () { location.href = m.href; });
+      return;
+    }
     var b = e.target.closest('[data-lang-btn]');
     if (b) { apply(b.dataset.langBtn); return; }
     var a = e.target.closest('[data-yt],[data-ytlist]');
