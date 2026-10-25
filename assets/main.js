@@ -12,6 +12,8 @@
   }
 
   gsap.registerPlugin(ScrollTrigger);
+  // the mobile address bar showing/hiding must not re-layout every trigger mid-swipe
+  ScrollTrigger.config({ ignoreMobileResize: true });
   var isEn = function () { return root.lang === 'en'; };
 
   // ---------- smooth scroll ----------
@@ -103,7 +105,9 @@
     var W, H, on = true, P = [];
     for (var i = 0; i < 160; i++) P.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.5 + 0.3, s: Math.random() * 0.0009 + 0.0002, a: Math.random() * 0.55 + 0.15, o: Math.random() * 6.28 });
     function size() { W = cv.width = cv.offsetWidth * dpr; H = cv.height = cv.offsetHeight * dpr; }
-    size(); addEventListener('resize', size);
+    // phones fire resize when the address bar slides; only re-measure on a real width change
+    var lastW = innerWidth;
+    size(); addEventListener('resize', function () { if (innerWidth !== lastW) { lastW = innerWidth; size(); } });
     ScrollTrigger.create({ trigger: '.hero', start: 'top bottom', end: 'bottom top', onToggle: function (s) { on = s.isActive; } });
     gsap.ticker.add(function (t) {
       if (!on) return;
