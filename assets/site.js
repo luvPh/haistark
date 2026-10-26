@@ -37,32 +37,45 @@
     '.yt-close{position:absolute;top:-44px;right:0;background:none;border:0;color:#fff;font-size:36px;cursor:pointer;line-height:1}';
   document.head.appendChild(css);
 
-  function copyText(t) {
-    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
-    var ta = document.createElement('textarea');
-    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta); ta.select();
-    var ok = document.execCommand('copy');
+  // execCommand runs synchronously inside the click, so it still works where the async
+  // Clipboard API is denied (in-app browsers, blocked site permission); the API is the backup
+  function legacyCopy(t) {
+    var ta = document.createElement('textarea'), ok = false;
+    ta.value = t; ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;font-size:16px';
+    document.body.appendChild(ta);
+    ta.select(); ta.setSelectionRange(0, t.length);
+    try { ok = document.execCommand('copy'); } catch (e) {}
     ta.remove();
-    return ok ? Promise.resolve() : Promise.reject();
+    return ok;
+  }
+  function copyText(t) {
+    if (legacyCopy(t)) return Promise.resolve();
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+    return Promise.reject();
+  }
+  function hint(wrap, key) {
+    var txt = wrap.querySelector('.ch-txt'), en = document.documentElement.lang === 'en';
+    txt.textContent = en ? txt.dataset[key + 'En'] : txt.dataset[key];
+    wrap.classList.add('copied');
+    clearTimeout(wrap._t);
+    wrap._t = setTimeout(function () {
+      txt.innerHTML = document.documentElement.lang === 'en' ? txt.dataset.en : txt.dataset.vi;
+      wrap.classList.remove('copied');
+    }, 2500);
   }
 
   document.addEventListener('click', function (e) {
-    // clicking the email copies it; if copying fails, the mailto link still opens
+    // clicking the email copies it; if the browser refuses, select it so it can be copied by hand
     var m = e.target.closest('[data-copy]');
     if (m) {
       e.preventDefault();
-      var wrap = m.parentNode, txt = wrap.querySelector('.ch-txt');
-      copyText(m.dataset.copy).then(function () {
-        var en = document.documentElement.lang === 'en';
-        txt.textContent = en ? txt.dataset.doneEn : txt.dataset.done;
-        wrap.classList.add('copied');
-        clearTimeout(wrap._t);
-        wrap._t = setTimeout(function () {
-          txt.innerHTML = document.documentElement.lang === 'en' ? txt.dataset.en : txt.dataset.vi;
-          wrap.classList.remove('copied');
-        }, 2000);
-      }, function () { location.href = m.href; });
+      var wrap = m.parentNode;
+      copyText(m.dataset.copy).then(function () { hint(wrap, 'done'); }, function () {
+        var r = document.createRange(), sel = getSelection();
+        r.selectNodeContents(m); sel.removeAllRanges(); sel.addRange(r);
+        hint(wrap, 'manual');
+      });
       return;
     }
     var b = e.target.closest('[data-lang-btn]');
